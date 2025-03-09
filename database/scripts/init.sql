@@ -12,8 +12,13 @@ CREATE TABLE IF NOT EXISTS users (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Add indexes for performance
+CREATE INDEX IF NOT EXISTS idx_users_username ON users(username);
+CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
+
 -- Insert some sample data
 INSERT INTO users (username, email) VALUES
-    ('user1', 'user1@example.com'),
-    ('user2', 'user2@example.com')
+    ('johndoe', 'john.doe@example.com'),
+    ('janedoe', 'jane.doe@example.com'),
+    ('testuser', 'test@example.com')
 ON CONFLICT DO NOTHING;

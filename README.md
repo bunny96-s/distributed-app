@@ -1,4 +1,4 @@
-echo "# Distributed Application System
+Distributed Application System
 
 A distributed system leveraging Docker, Kubernetes, and GitHub.
 
