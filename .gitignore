@@ -1,4 +1,4 @@
-echo "# Python
+# Python
 __pycache__/
 *.py[cod]
 *$py.class
@@ -21,4 +21,4 @@ yarn-error.log
 .docker/
 
 # Misc
-.DS_Store" > .gitignore
+.DS_Store
