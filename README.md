@@ -4,7 +4,7 @@ A distributed system leveraging Docker, Kubernetes, and GitHub.
 
 ## Components
 - Frontend (HTML, CSS, JavaScript)
-- Backend (Python with Flask/FastAPI)
+- Backend (Python with FastAPI)
 - Database (PostgreSQL)
 - Docker containerization
 - Kubernetes orchestration
