@@ -45,39 +45,81 @@ Before running the application, ensure that you have the following installed:
 - **Python 3.x**: For running the backend API locally.
   
 ### Steps to Run Locally
-1. **Clone the repository**:
-   - git clone -b feature-enhancement-docker https://github.com/bunny96-s/distributed-app.git
-     
-2. **Navigate to the project directory**:
-   - cd distributed-app
+1. **Ensure Docker and Docker Compose are installed on your system**
+2. **Clone the repository**:
+      - git clone -b feature-enhancement-docker https://github.com/bunny96-s/distributed-app.git
+3. **Navigate to the project directory**:
+      - cd distributed-app
 
-2. **Set Up the Virtual Environment for Python**:
+4. **Set Up the Virtual Environment for Python**:
    - python3 -m venv venv
         source venv/bin/activate -- For Linux/macOS
         .\venv\Scripts\activate  -- For Windows
      
-3. **Install Backend Dependencies**:
+5. **Install Backend Dependencies**:
    - pip install -r requirements.txt
 
-6. **Build and run the containers**:
+6. **Create a .env file with the following environment variables**:
+      - POSTGRES_USER={username}
+        POSTGRES_PASSWORD={password}
+        POSTGRES_DB=app_db
+        
+7. **Build and run the containers**:
    - docker-compose up -d
 
-7. **Access the application locally**:
+8. **Verify all containers are running**:
+     - docker-compose ps
+       
+9. **Access the application locally**:
    - Frontend: http://localhost
    - Backend: http://localhost:8000
    - API Documentation: http://localhost:8000/docs
-
+  
 ### Kubernetes Deployment
-1. **Set Up Kubernetes**:
-     -  kubectl cluster-info
-  
-2. **Deploy the Application to Kubernetes**:
-     -  kubectl apply -f kubernetes/
+1. **Install Kind (Kubernetes in Docker)**:
+     -  curl -Lo ./kind "https://kind.sigs.k8s.io/dl/v0.22.0/kind-linux-amd64"
+     -  chmod +x ./kind
+     -  sudo mv ./kind /usr/local/bin/kind
 
-3. **Verify the Deployment**:
-   - kubectl get pods
-   - kubectl get svc
   
+2. **Create a Kind Cluster**:
+     -  kubectl apply -f kubernetes/
+       
+3. **Create the persistent volume claim first**
+     - sudo kind create cluster --name my-cluster
+
+4. **Push Docker Images to Docker Hub** 
+    - sudo docker tag distributed-app_frontend:latest <your-dockerhub-username>/distributed- 
+      app_frontend:latest
+    - sudo docker tag distributed-app_backend:latest <your-dockerhub-username>/distributed- 
+      app_backend:latest
+    - sudo docker tag distributed-app_db:latest <your-dockerhub-username>/distributed- 
+      app_db:latest
+    - sudo docker push <your-dockerhub-username>/distributed-app_frontend:latest
+    - sudo docker push <your-dockerhub-username>/distributed-app_backend:latest
+    - sudo docker push <your-dockerhub-username>/distributed-app_db:latest
+
+      
+3. **Update Kubernetes YAML Files**:
+   - - name: backend
+     image: <your-dockerhub-username>/distributed-app_backend:latest
+
+
+4. **Deploy the Application**:
+    - sudo kubectl apply -f k8s/config/postgres-pvc.yaml
+    - sudo kubectl apply -f k8s/config/db-credentials.yaml
+    - sudo kubectl apply -f k8s/deployments/
+    - sudo kubectl apply -f k8s/services/
+    - sudo kubectl apply -f k8s/config/prometheus-configmap.yaml
+Repeat this for all deployments (frontend, backend, and database).
+      
+5. **Verify the Deployment**:
+    - sudo kubectl get pods
+    - sudo kubectl get services
+ 
+6. **Access the Application**:
+    - http://localhost:<NodePort>
+   
 ### Monitoring with Prometheus
 1. **Prometheus Setup**:
    - kubectl apply -f kubernetes/prometheus/
@@ -117,33 +159,8 @@ The API follows standard HTTP status codes:
 - 401: Unauthorized
 - 404: Resource not found
 - 500: Server error
-  
-## Deployment Guide
-**Local Deployment with Docker Compose**
-   1. Ensure Docker and Docker Compose are installed on your system
-   2. Clone the repository:
-      - git clone -b feature-enhancement-docker https://github.com/bunny96-s/distributed-app.git
-   3. Navigate to the project directory:
-      - cd distributed-app
-   4. Create a .env file with the following environment variables (or adjust as needed):
-      - POSTGRES_USER=kishan98
-        POSTGRES_PASSWORD=testdb
-        POSTGRES_DB=app_db
-  5. Build and start the containers:
-     - docker-compose up -d
-  6. Verify all containers are running:
-     - docker-compose ps
 
- **Kubernetes Deployment**
-   1. Make sure you have kubectl configured with access to your Kubernetes cluster
-   2. Apply the Kubernetes configuration files:
-      - kubectl apply -f k8s/namespace.yaml
-      - kubectl apply -f k8s/database.yaml
-      - kubectl apply -f k8s/backend.yaml
-      - kubectl apply -f k8s/frontend.yaml
-  3. Verify the deployments are running:
-     - kubectl get pods -n distributed-app
-  4. Set up an Ingress or LoadBalancer service to expose the application externally
+
 
 
 
