@@ -9,7 +9,7 @@ This project implements a modern, containerized distributed application with a c
 - PostgreSQL database for persistent storage
 - Full Docker containerization for consistent development and deployment
 
-**Key Features**
+### Key Features
 - User Management System: Create, retrieve, and manage user accounts
 - Event Registration: Holi celebration registration system with event details and registration 
   form
@@ -17,7 +17,7 @@ This project implements a modern, containerized distributed application with a c
 - Containerized Architecture: Fully Dockerized with multi-container configuration
 - Database Integration: PostgreSQL database with persistent storage
 
-## Components
+### Components
 - Frontend (HTML, CSS, JavaScript)
 - Backend (Python with Flask/FastAPI)
 - Database (PostgreSQL)
@@ -25,32 +25,62 @@ This project implements a modern, containerized distributed application with a c
 - Kubernetes orchestration
 - Monitoring with Prometheus
 
-## Architecture
+### Architecture
 The application follows a three-tier architecture:
 - Frontend: HTML, CSS, JavaScript
 - Backend: Python with FastAPI (API version 0.1.0)
 - Database: PostgreSQL
 
-## Docker Components
+### Docker Components
 - Frontend container (Nginx)
 - Backend container (Python/FastAPI)
 - Database container (PostgreSQL)
 - Custom networking with Docker Compose
 
 ## Setup Instructions
-1. Clone the repository:
-   - git clone -b feature-enhancement-docker https://github.com/bunny96-s/distributed-app.git
+Before running the application, ensure that you have the following installed:
+- **Docker**: For containerizing the application and running containers locally.
+- **Kubernetes**: You can use Minikube or Docker Desktop for local Kubernetes deployment, or a cloud-based Kubernetes service.
+- **Git**: For cloning the repository.
+- **Python 3.x**: For running the backend API locally.
   
-2. Navigate to the project directory:
+### Steps to Run Locally
+1. **Clone the repository**:
+   - git clone -b feature-enhancement-docker https://github.com/bunny96-s/distributed-app.git
+     
+2. **Navigate to the project directory**:
    - cd distributed-app
 
-3. Build and run the containers:
+2. **Set Up the Virtual Environment for Python**:
+   - python3 -m venv venv
+        source venv/bin/activate -- For Linux/macOS
+        .\venv\Scripts\activate  -- For Windows
+     
+3. **Install Backend Dependencies**:
+   - pip install -r requirements.txt
+
+6. **Build and run the containers**:
    - docker-compose up -d
 
-4. Access the application:
+7. **Access the application locally**:
    - Frontend: http://localhost
    - Backend: http://localhost:8000
    - API Documentation: http://localhost:8000/docs
+
+### Kubernetes Deployment
+1. **Set Up Kubernetes**:
+     -  kubectl cluster-info
+  
+2. **Deploy the Application to Kubernetes**:
+     -  kubectl apply -f kubernetes/
+
+3. **Verify the Deployment**:
+   - kubectl get pods
+   - kubectl get svc
+  
+### Monitoring with Prometheus
+1. **Prometheus Setup**:
+   - kubectl apply -f kubernetes/prometheus/
 
 ## API Documentation
 The API documentation is available through the interactive Swagger UI at http://localhost:8000/docs. The API follows OpenAPI 3.1 standards and provides the following endpoints:
@@ -79,11 +109,6 @@ Get User by ID
  - Description: Retrieves a specific user by ID
  - Path Parameter: user_id - Unique identifier for the user
  - Response: User object
-       
-## Authentication
-Authentication is handled through JWT tokens. To use protected endpoints:
-1. Obtain a token through the authentication endpoint
-2. Include the token in the Authorization header of subsequent requests
 
 ## Error Responses
 The API follows standard HTTP status codes:
