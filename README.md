@@ -103,7 +103,7 @@ Before running the application, ensure that you have the following installed:
 3. **Update Kubernetes YAML Files**:
    - - name: backend
      image: <your-dockerhub-username>/distributed-app_backend:latest
-
+Repeat this for all deployments (frontend, backend, and database).
 
 4. **Deploy the Application**:
     - sudo kubectl apply -f k8s/config/postgres-pvc.yaml
@@ -111,18 +111,13 @@ Before running the application, ensure that you have the following installed:
     - sudo kubectl apply -f k8s/deployments/
     - sudo kubectl apply -f k8s/services/
     - sudo kubectl apply -f k8s/config/prometheus-configmap.yaml
-Repeat this for all deployments (frontend, backend, and database).
-      
+     
 5. **Verify the Deployment**:
     - sudo kubectl get pods
     - sudo kubectl get services
  
 6. **Access the Application**:
-    - http://localhost:<NodePort>
-   
-### Monitoring with Prometheus
-1. **Prometheus Setup**:
-   - kubectl apply -f kubernetes/prometheus/
+    - http://localhost:{NodePort} # Change the node port to access frontend, backend and prometheus accordingly.
 
 ## API Documentation
 The API documentation is available through the interactive Swagger UI at http://localhost:8000/docs. The API follows OpenAPI 3.1 standards and provides the following endpoints:
