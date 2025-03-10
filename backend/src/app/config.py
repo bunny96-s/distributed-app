@@ -3,5 +3,5 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-DATABASE_URL = "postgresql://kishan98:testdb@localhost:5432/app_db"
-
+# Get DATABASE_URL from environment variable or use default
+DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://kishan98:testdb@db:5432/app_db")

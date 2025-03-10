@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - app-network
+    volumes:
+      - ./frontend/src:/usr/share/nginx/html
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      - DATABASE_URL=postgresql://kishan98:testdb@db:5432/app_db
+    networks:
+      - app-network
+    volumes:
+      - ./backend/src:/app
+    restart: always
+
+  db:
+    build:
+      context: .
+      dockerfile: Dockerfile.database
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=kishan98
+      - POSTGRES_PASSWORD=testdb
+      - POSTGRES_DB=app_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - app-network
+    restart: always
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  postgres_data:

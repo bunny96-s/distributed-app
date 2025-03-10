@@ -1,0 +1,7 @@
+FROM postgres:14-alpine
+
+# Copy initialization script
+COPY database/scripts/init.sql /docker-entrypoint-initdb.d/
+
+# Expose the port
+EXPOSE 5432
